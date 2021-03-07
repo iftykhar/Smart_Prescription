@@ -10,6 +10,7 @@
 <body>
     <form action="test1.blade.php" method="get">
         <input type="text" name="title" class="form-control" id="title">
+
     </form>
 </body>
 </html>
