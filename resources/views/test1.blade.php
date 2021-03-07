@@ -8,9 +8,14 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="test1.blade.php" method="get">
-        <input type="text" name="title" class="form-control" id="title">
-
-    </form>
+<br>
+    <div class="col-2"></div>
+    <div class="col-8 ">
+        <form action="test1.blade.php" method="get">
+            <input type="text" name="title" class="form-control" id="title">
+        </form>
 </body>
+    </div>
+    <div class="col-2"></div>
+
 </html>
