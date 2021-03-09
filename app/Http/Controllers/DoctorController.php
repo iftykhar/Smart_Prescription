@@ -14,8 +14,7 @@ class DoctorController extends Controller
      */
     public function index()
     {
-       $doc = Doctor::all();
-       return view('doctor.index',compact('doc'));
+       return Doctor::all();
     }
 
     /**
@@ -26,7 +25,6 @@ class DoctorController extends Controller
     public function create()
     {
         //
-        return view('doctor.create');
     }
 
     /**
@@ -37,7 +35,13 @@ class DoctorController extends Controller
      */
     public function store(Request $request)
     {
-        //$request-> all();
+        $request->validate([
+            'name' => 'required',
+            'degree' => 'required',
+            'phone' => 'required',
+            'email' => 'required',
+            'address' => 'required',
+        ]);
         $doc = new Doctor;
 
         $doc->name = $request->name;
@@ -46,9 +50,9 @@ class DoctorController extends Controller
         $doc->email = $request->email;
         $doc->address = $request->address;
         $doc->hospital_id = 0;
-        $doc->save();
 
-        return  view('doctor.create', ['message'=>'sucessfull creation']);
+
+        return  $doc->save();
     }
 
     /**
@@ -57,9 +61,10 @@ class DoctorController extends Controller
      * @param  \App\Models\Doctor  $doctor
      * @return \Illuminate\Http\Response
      */
-    public function show(Doctor $doctor)
+    public function show($id)
     {
         //
+        return Doctor::find($id);
     }
 
     /**
@@ -68,11 +73,9 @@ class DoctorController extends Controller
      * @param  \App\Models\Doctor  $doctor
      * @return \Illuminate\Http\Response
      */
-    public function edit(Doctor $doctor)
+    public function edit($id)
     {
-        $doc = Doctor::findOrfail($doctor->id);
-        return view('doctor.edit', compact('doc',$doc));
-
+       //
     }
 
     /**
@@ -102,7 +105,7 @@ class DoctorController extends Controller
 
         $doc->save();
 
-        return redirect('doctor');
+        return array('status' => true, 'message' => 'update success');
     }
 
     /**
@@ -117,6 +120,6 @@ class DoctorController extends Controller
         $doc = Doctor::findOrfail($doctor->id);
 
         $doc->delete();
-        return redirect('doctor');
+        return array('status' => true, 'message' => 'delete success');
     }
 }

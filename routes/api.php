@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\DoctorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Models\Doctor;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +19,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('doctor', function (){
+   return Doctor::all();
+});
+
+Route::resource('doctor', DoctorController::class);
