@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DoctorController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,3 +20,5 @@ Route::get('/', function () {
 Route::get('/home',function (){
     return view('test1');
 });
+Route::resource("doctor", DoctorController::class);
+//Route::resource("doctor", [DoctorController::class, 'store'])->name('doctor.store');
