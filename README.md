@@ -1,11 +1,11 @@
 ##PRESCRIPTION Management System 
-###Backend API 
+##Backend API 
  - Laravel
  - MVC pattern
  - OOP PHP
 
-###API Documentation Endpoint
-####Create a Doctor Profile 
+##API Documentation Endpoint
+##Create a Doctor Profile 
 POST Method `https://example.com/api/doctor/create`
 
 Example: 
