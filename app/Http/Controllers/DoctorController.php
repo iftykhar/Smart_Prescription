@@ -92,12 +92,10 @@ class DoctorController extends Controller
     }
 
 
-    public function destroy(Doctor $doctor): array
+    public function destroy(Doctor $doctor)
     {
-        //delete
-        $doc = Doctor::findOrfail($doctor->id);
+        Doctor::destroy($doctor->id);
+        return response()->json(['status' => true, 'message' => 'delete success']);
 
-        $doc->delete();
-        return array('status' => true, 'message' => 'delete success');
     }
 }
