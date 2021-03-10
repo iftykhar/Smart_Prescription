@@ -4,88 +4,71 @@ namespace App\Http\Controllers;
 
 use App\Models\Doctor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class DoctorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
        return Doctor::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         //
+        return 0;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
+
+
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:3',
             'degree' => 'required',
-            'phone' => 'required',
-            'email' => 'required',
+            'phone' => 'required|min:11|max:11',
+            'email' => 'required|unique:doctors|email',
             'address' => 'required',
         ]);
-        $doc = new Doctor;
 
-        $doc->name = $request->name;
-        $doc->degree = $request->degree;
-        $doc->phone = $request->phone;
-        $doc->email = $request->email;
-        $doc->address = $request->address;
-        $doc->hospital_id = 0;
+        if($validator->fails()){
+            return response($validator->errors());
+        }else{
 
+       $doc = new Doctor;
 
-        return  $doc->save();
+           $doc->name = $request->name;
+           $doc->degree = $request->degree;
+           $doc->phone = $request->phone;
+           $doc->email = $request->email;
+           $doc->address = $request->address;
+           $doc->hospital_id = 0;
+
+           $doc->save();
+            return response()->json(['status' => true, 'message' => 'data insert success']);
+        }
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Doctor  $doctor
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
         //
         return Doctor::find($id);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Doctor  $doctor
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($id)
     {
        //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Doctor  $doctor
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Doctor $doctor)
+
+    public function update(Request $request, Doctor $doctor): array
     {
         //validation for update
         $request->validate([
@@ -108,13 +91,8 @@ class DoctorController extends Controller
         return array('status' => true, 'message' => 'update success');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Doctor  $doctor
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Doctor $doctor)
+
+    public function destroy(Doctor $doctor): array
     {
         //delete
         $doc = Doctor::findOrfail($doctor->id);
