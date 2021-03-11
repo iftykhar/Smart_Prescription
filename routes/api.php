@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\MedicineSuggestionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Doctor;
@@ -25,3 +26,4 @@ Route::get('doctor', function (){
 });
 
 Route::resource('doctor', DoctorController::class);
+Route::resource('MedicineSuggestion', MedicineSuggestionController::class);
