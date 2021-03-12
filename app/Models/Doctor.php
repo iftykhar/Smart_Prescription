@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * @method static find($id)
+ * @method static findOrfail(mixed $id)
+ */
 class Doctor extends Model
 {
     //use HasFactory;
@@ -38,4 +42,8 @@ class Doctor extends Model
         'address',
 
     ];
+    /**
+     * @var mixed
+     */
+
 }

@@ -1,91 +1,84 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class DoctorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-       $doc = Doctor::all();
-       return view('doctor.index',compact('doc'));
+       return Doctor::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         //
-        return view('doctor.create');
+        return 0;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
-        //$request-> all();
-        $doc = new Doctor;
 
-        $doc->name = $request->name;
-        $doc->degree = $request->degree;
-        $doc->phone = $request->phone;
-        $doc->email = $request->email;
-        $doc->address = $request->address;
-        $doc->hospital_id = 0;
-        $doc->save();
 
-        return  view('doctor.create', ['message'=>'sucessfull creation']);
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:3',
+            'degree' => 'required',
+            'phone' => 'required|min:11|max:11',
+            'email' => 'required|unique:doctors|email',
+            'address' => 'required',
+        ]);
+
+        if($validator->fails()){
+            return response($validator->errors());
+        }else{
+
+       $doc = new Doctor;
+
+           $doc->name = $request->name;
+           $doc->degree = $request->degree;
+           $doc->phone = $request->phone;
+           $doc->email = $request->email;
+           $doc->address = $request->address;
+           $doc->hospital_id = 0;
+
+           $doc->save();
+            return response()->json(['status' => true, 'message' => 'data insert success']);
+        }
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Doctor  $doctor
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Doctor $doctor)
+
+    public function show($id)
     {
-        //
+        // handle failed error by using try catch block, this catch block catch ModelNotFoundExecption from Model
+        try {
+            $doctor =  Doctor::findOrfail($id);
+
+        }catch (ModelNotFoundException $exception){
+         return response()->json(['Not found'], 404);
+        }
+        return $doctor;
+
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Doctor  $doctor
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Doctor $doctor)
+
+    public function edit($id)
     {
-        $doc = Doctor::findOrfail($doctor->id);
-        return view('doctor.edit', compact('doc',$doc));
-
+       //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Doctor  $doctor
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Doctor $doctor)
+
+    public function update(Request $request, $id)
     {
         //validation for update
-        $request->validate([
+        $validator = Validator::make($request->all(),[
             'name' => 'required',
             'degree' => 'required',
             'phone' => 'required',
@@ -93,30 +86,35 @@ class DoctorController extends Controller
             'address' => 'required',
         ]);
         //update
-        $doc = Doctor::findOrfail($doctor->id);
-        $doc->name = $request->name;
-        $doc->degree = $request->degree;
-        $doc->phone = $request->phone;
-        $doc->email = $request->email;
-        $doc->address = $request->address;
+        if($validator->fails()){
+            return response()->json($validator->errors());
+        }else{
+            try {
+                $doc = Doctor::findOrfail($id);
+            }catch (ModelNotFoundException $exception){
+                return response()->json('not found model');
+            }
 
-        $doc->save();
 
-        return redirect('doctor');
+            $doc->name = $request->name;
+            $doc->degree = $request->degree;
+            $doc->phone = $request->phone;
+            $doc->email = $request->email;
+            $doc->address = $request->address;
+
+            $doc->save();
+            return response()->json('done');
+        }
+
+
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Doctor  $doctor
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy(Doctor $doctor)
     {
-        //delete
-        $doc = Doctor::findOrfail($doctor->id);
+        Doctor::destroy($doctor->id);
+        return response()->json(['status' => true, 'message' => 'delete success']);
 
-        $doc->delete();
-        return redirect('doctor');
     }
 }
