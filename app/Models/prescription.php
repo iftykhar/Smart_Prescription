@@ -15,6 +15,7 @@ class prescription extends Model
         'patient_gender',
         'patient_weight',
         'patient_bp_high',
-        'patient_bp_low'
+        'patient_bp_low',
+        'status'
     ];
 }

@@ -22,6 +22,7 @@ class CreatePrescriptionsTable extends Migration
             $table->integer('patient_bp_high');
             $table->integer('patient_bp_low');
             $table->timestamps();
+
         });
     }
 
