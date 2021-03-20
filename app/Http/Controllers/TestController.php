@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Symptom;
+use App\Models\Test;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class SymptomController extends Controller
+class TestController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class SymptomController extends Controller
      */
     public function index()
     {
-        return Symptom::all();
+        return Test::all();
     }
 
     /**
@@ -35,11 +35,11 @@ class SymptomController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request)
     {
         //validation
         $validate = Validator::make($request->all(),[
-            'symptoms_name'=> 'required',
+            'tests_name'=> 'required',
         ]);
 
         if ($validate->fails()){
@@ -49,38 +49,37 @@ class SymptomController extends Controller
 
         }
 
-        $symp = new Symptom;
+        $tes = new Test;
+        $tes->tests_name = $request->tests_name;
 
-        $symp->symptoms_name = $request->symptoms_name;
-
-        $symp->save();
+        $tes->save();
         return response()->json(['status'=>true, 'message'=>'data stored successfully']);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Symptom  $symptom
+     * @param  \App\Models\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function show(Symptom $symptom): \Illuminate\Http\JsonResponse
+    public function show(Test $test)
     {
         try {
-            $symp = Symptom::findOrfail($symptom);
+            $tes = Test::findOrfail($test);
         }
         catch (ModelNotFoundException $exception){
             return response()->json(['Not found'], 404);
         }
-        return $symp;
+        return $tes;
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Symptom  $symptom
+     * @param  \App\Models\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function edit(Symptom $symptom)
+    public function edit(Test $test)
     {
         //
     }
@@ -89,42 +88,42 @@ class SymptomController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Symptom  $symptom
+     * @param  \App\Models\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Symptom $symptom): \Illuminate\Http\JsonResponse
+    public function update(Request $request, Test $test)
     {
         //validation
         $validate = Validator::make($request->all(),[
-            'symptoms_name'=> 'required',
+            'tests_name'=> 'required',
         ]);
 
-        if($validate->fails()){
+        if ($validate->fails()){
             return response()->json($validate->errors());
-        }else {
+        }else{
             try {
-                $symp = Symptom::findOrfail($symptom->id);
-            } catch (ModelNotFoundException $exception) {
+                $tes = Test::findOrfail($test->id);
+            }
+            catch (ModelNotFoundException $exception){
                 return response()->json('not found model');
             }
         }
 
+        $tes = new Test;
+        $tes->tests_name = $request->tests_name;
 
-
-        $symp->symptoms_name = $request->symptoms_name;
-
-        $symp->save();
+        $tes->save();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Symptom  $symptom
+     * @param  \App\Models\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Symptom $symptom): \Illuminate\Http\JsonResponse
+    public function destroy(Test $test)
     {
-        Symptom::destroy($symptom->id);
+        Test::destroy($test->id);
         return response()->json(['status'=>true, 'message'=>'delete successfull']);
     }
 }

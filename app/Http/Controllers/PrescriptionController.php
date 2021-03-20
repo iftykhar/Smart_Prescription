@@ -124,7 +124,7 @@ class PrescriptionController extends Controller
             return response()->json($validate->errors());
         }else {
             try {
-                $pres = PrescriptionController::findOrfail($prescription);
+                $pres = PrescriptionController::findOrfail($prescription->id);
             } catch (ModelNotFoundException $exception) {
                 return response()->json('not found model');
             }

@@ -125,7 +125,7 @@ class MedicineController extends Controller
             return response()->json($validate->errors());
         }else {
             try {
-                $med = Medicine::findOrfail($medicine);
+                $med = Medicine::findOrfail($medicine->id);
             } catch (ModelNotFoundException $exception) {
                 return response()->json('not found model');
             }
