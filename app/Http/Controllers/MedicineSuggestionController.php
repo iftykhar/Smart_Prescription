@@ -123,7 +123,7 @@ class MedicineSuggestionController extends Controller
             return response()->json($validate->errors());
         }else {
             try {
-                $med = MedicineSuggestion::findOrfail($medicineSuggestion);
+                $med = MedicineSuggestion::findOrfail($medicineSuggestion->id);
             } catch (ModelNotFoundException $exception) {
                 return response()->json('not found model');
             }
