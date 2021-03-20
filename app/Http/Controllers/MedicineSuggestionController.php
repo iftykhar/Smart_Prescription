@@ -152,5 +152,7 @@ class MedicineSuggestionController extends Controller
     public function destroy(MedicineSuggestion $medicineSuggestion)
     {
         //
+        MedicineSuggestion::destroy($medicineSuggestion->id);
+        return response()->json(['status' => true, 'message' => 'delete success']);
     }
 }

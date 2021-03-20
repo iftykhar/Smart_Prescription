@@ -111,10 +111,15 @@ class MedicineController extends Controller
             'medicine_continues' => 'required',
         ]);
 
-        if ($validate->fails()){
-            return response()->json(['status' => false , 'message' => $validate->errors(), 'data' => $request]);
+        //update
+        if($validator->fails()){
+            return response()->json($validator->errors());
         }else{
-            return response()->json(['status' => true , 'message' => 'success']);
+            try {
+                $doc = Medicine::findOrfail($medicine);
+            }catch (ModelNotFoundException $exception){
+                return response()->json('not found model');
+            }
 
             $med = new Medicine;
 
@@ -140,5 +145,7 @@ class MedicineController extends Controller
     public function destroy(Medicine $medicine)
     {
         //
+        Medicine::destroy($medicine->id);
+        return response()->json(['status' => true, 'message' => 'delete success']);
     }
 }
