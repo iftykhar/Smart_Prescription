@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\prescription;
+use App\Models\Medicine;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
-class PrescriptionController extends Controller
+class MedicineController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +16,7 @@ class PrescriptionController extends Controller
     public function index()
     {
         //
-        return PrescriptionContoller::all();
+        return Medicine::all();
     }
 
     /**
@@ -36,17 +37,18 @@ class PrescriptionController extends Controller
      */
     public function store(Request $request)
     {
-        //validation procedure
+        //validate
+
 
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\prescription  $prescription
+     * @param  \App\Models\Medicine  $medicine
      * @return \Illuminate\Http\Response
      */
-    public function show(prescription $prescription)
+    public function show(Medicine $medicine)
     {
         //
     }
@@ -54,10 +56,10 @@ class PrescriptionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\prescription  $prescription
+     * @param  \App\Models\Medicine  $medicine
      * @return \Illuminate\Http\Response
      */
-    public function edit(prescription $prescription)
+    public function edit(Medicine $medicine)
     {
         //
     }
@@ -66,10 +68,10 @@ class PrescriptionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\prescription  $prescription
+     * @param  \App\Models\Medicine  $medicine
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, prescription $prescription)
+    public function update(Request $request, Medicine $medicine)
     {
         //
     }
@@ -77,10 +79,10 @@ class PrescriptionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\prescription  $prescription
+     * @param  \App\Models\Medicine  $medicine
      * @return \Illuminate\Http\Response
      */
-    public function destroy(prescription $prescription)
+    public function destroy(Medicine $medicine)
     {
         //
     }
