@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\MedicineSuggestionController;
 use Illuminate\Http\Request;
@@ -17,6 +18,23 @@ use App\Models\Doctor;
 |
 */
 
+// Basic Auth Route, it is guest mode
+Route::post('register',[AuthController::class,'register']);
+Route::post('login',[AuthController::class,'login']);
+Route::post('logout',[AuthController::class,'logout']);
+
+
+//Protected Login Group route list
+
+Route::group(['middleware' => ['auth:sanctum']], function(){
+    Route::resource('MedicineSuggestion', MedicineSuggestionController::class);
+});
+
+
+
+
+
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -26,4 +44,4 @@ Route::get('doctor', function (){
 });
 
 Route::resource('doctor', DoctorController::class);
-Route::resource('MedicineSuggestion', MedicineSuggestionController::class);
+
