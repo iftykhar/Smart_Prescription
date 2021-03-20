@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MedicineSuggestion;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -63,7 +64,7 @@ class MedicineSuggestionController extends Controller
             $med->ms_score = 0;
 
             $med->save();
-
+            return response()->json(['status' => true, 'message' => 'data insert success']);
     }
 
     /**
@@ -72,9 +73,17 @@ class MedicineSuggestionController extends Controller
      * @param  \App\Models\MedicineSuggestion  $medicineSuggestion
      * @return \Illuminate\Http\Response
      */
-    public function show(MedicineSuggestion $medicineSuggestion)
+    public function show(MedicineSuggestion $medicineSuggestion): \Illuminate\Http\JsonResponse
     {
         //
+        try{
+            $med = MedicineSuggestion::findOrfail($medicineSuggestion->id);
+        }
+        catch (ModelNotFoundException $exception){
+            return response()->json(['Not found'], 404);
+        }
+        return $med;
+
     }
 
     /**
@@ -95,7 +104,7 @@ class MedicineSuggestionController extends Controller
      * @param  \App\Models\MedicineSuggestion  $medicineSuggestion
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, MedicineSuggestion $medicineSuggestion)
+    public function update(Request $request, MedicineSuggestion $medicineSuggestion): \Illuminate\Http\JsonResponse
     {
         //
         $validate = Validator::make($request->all(), [
@@ -109,13 +118,16 @@ class MedicineSuggestionController extends Controller
             'medicine_continues' => 'required',
         ]);
 
-        if ($validate->fails()){
-            return response()->json(['status' => false , 'message' => $validate->errors(), 'data' => $request]);
-        }else{
-            return response()->json(['status' => true , 'message' => 'success']);
-
+        //update
+        if($validate->fails()){
+            return response()->json($validate->errors());
+        }else {
+            try {
+                $med = MedicineSuggestion::findOrfail($medicineSuggestion);
+            } catch (ModelNotFoundException $exception) {
+                return response()->json('not found model');
+            }
         }
-        $med = new MedicineSuggestion;
 
         $med->symptom_name = $request->symptom_name;
         $med->medicine_name = $request->medicine_name;
@@ -128,6 +140,7 @@ class MedicineSuggestionController extends Controller
         $med->ms_score = 0;
 
         $med->save();
+        return response()->json('done');
     }
 
     /**
@@ -136,8 +149,10 @@ class MedicineSuggestionController extends Controller
      * @param  \App\Models\MedicineSuggestion  $medicineSuggestion
      * @return \Illuminate\Http\Response
      */
-    public function destroy(MedicineSuggestion $medicineSuggestion)
+    public function destroy(MedicineSuggestion $medicineSuggestion): \Illuminate\Http\JsonResponse
     {
         //
+        MedicineSuggestion::destroy($medicineSuggestion->id);
+        return response()->json(['status' => true, 'message' => 'delete success']);
     }
 }
