@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Medicine;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -74,9 +75,17 @@ class MedicineController extends Controller
      * @param  \App\Models\Medicine  $medicine
      * @return \Illuminate\Http\Response
      */
-    public function show(Medicine $medicine)
+    public function show(Medicine $medicine): \Illuminate\Http\JsonResponse
     {
         //
+        try {
+            $med = Medicine::findOrfail($medicine->id);
+        }
+        catch (ModelNotFoundException $exception){
+            return response()->json(['Not found'], 404);
+        }
+        return $med;
+
     }
 
     /**
@@ -112,17 +121,15 @@ class MedicineController extends Controller
         ]);
 
         //update
-        if($validator->fails()){
-            return response()->json($validator->errors());
-        }else{
+        if($validate->fails()){
+            return response()->json($validate->errors());
+        }else {
             try {
-                $doc = Medicine::findOrfail($medicine);
-            }catch (ModelNotFoundException $exception){
+                $med = Medicine::findOrfail($medicine);
+            } catch (ModelNotFoundException $exception) {
                 return response()->json('not found model');
             }
-
-            $med = new Medicine;
-
+        }
             $med->symptom_name = $request->symptom_name;
             $med->medicine_name = $request->medicine_name;
             $med->medicine_days = $request->medicine_days;
@@ -142,7 +149,7 @@ class MedicineController extends Controller
      * @param  \App\Models\Medicine  $medicine
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Medicine $medicine)
+    public function destroy(Medicine $medicine): \Illuminate\Http\JsonResponse
     {
         //
         Medicine::destroy($medicine->id);

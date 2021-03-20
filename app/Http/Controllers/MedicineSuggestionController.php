@@ -73,17 +73,17 @@ class MedicineSuggestionController extends Controller
      * @param  \App\Models\MedicineSuggestion  $medicineSuggestion
      * @return \Illuminate\Http\Response
      */
-    public function show(MedicineSuggestion $medicineSuggestion)
+    public function show(MedicineSuggestion $medicineSuggestion): \Illuminate\Http\JsonResponse
     {
         //
         try{
-            $med = MedicineSuggestion::findOrfail($medicineSuggestion);
+            $med = MedicineSuggestion::findOrfail($medicineSuggestion->id);
         }
         catch (ModelNotFoundException $exception){
             return response()->json(['Not found'], 404);
         }
         return $med;
-}
+
     }
 
     /**
@@ -119,15 +119,15 @@ class MedicineSuggestionController extends Controller
         ]);
 
         //update
-        if($validator->fails()){
-            return response()->json($validator->errors());
-        }else{
+        if($validate->fails()){
+            return response()->json($validate->errors());
+        }else {
             try {
-                $doc = MedicineSuggestion::findOrfail($medicineSuggestion);
-            }catch (ModelNotFoundException $exception){
+                $med = MedicineSuggestion::findOrfail($medicineSuggestion);
+            } catch (ModelNotFoundException $exception) {
                 return response()->json('not found model');
             }
-        $med = new MedicineSuggestion;
+        }
 
         $med->symptom_name = $request->symptom_name;
         $med->medicine_name = $request->medicine_name;
@@ -149,7 +149,7 @@ class MedicineSuggestionController extends Controller
      * @param  \App\Models\MedicineSuggestion  $medicineSuggestion
      * @return \Illuminate\Http\Response
      */
-    public function destroy(MedicineSuggestion $medicineSuggestion)
+    public function destroy(MedicineSuggestion $medicineSuggestion): \Illuminate\Http\JsonResponse
     {
         //
         MedicineSuggestion::destroy($medicineSuggestion->id);
