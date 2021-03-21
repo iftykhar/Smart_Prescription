@@ -114,6 +114,7 @@ class SymptomController extends Controller
         $symp->symptoms_name = $request->symptoms_name;
 
         $symp->save();
+        return response()->json('done');
     }
 
     /**
