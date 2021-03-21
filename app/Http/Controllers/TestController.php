@@ -35,7 +35,7 @@ class TestController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         //validation
         $validate = Validator::make($request->all(),[
@@ -62,7 +62,7 @@ class TestController extends Controller
      * @param  \App\Models\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function show(Test $test)
+    public function show(Test $test): \Illuminate\Http\JsonResponse
     {
         try {
             $tes = Test::findOrfail($test);
@@ -91,7 +91,7 @@ class TestController extends Controller
      * @param  \App\Models\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Test $test)
+    public function update(Request $request, Test $test): \Illuminate\Http\JsonResponse
     {
         //validation
         $validate = Validator::make($request->all(),[
@@ -113,6 +113,7 @@ class TestController extends Controller
         $tes->tests_name = $request->tests_name;
 
         $tes->save();
+        return response()->json('done');
     }
 
     /**
@@ -121,7 +122,7 @@ class TestController extends Controller
      * @param  \App\Models\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Test $test)
+    public function destroy(Test $test): \Illuminate\Http\JsonResponse
     {
         Test::destroy($test->id);
         return response()->json(['status'=>true, 'message'=>'delete successfull']);

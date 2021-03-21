@@ -15,6 +15,9 @@ class CreateTestSuggestionsTable extends Migration
     {
         Schema::create('test__suggestions', function (Blueprint $table) {
             $table->id();
+            $table->string('symptom_name');
+            $table->string('tests_name');
+            $table->integer('ts_score');
             $table->timestamps();
         });
     }
