@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\prescription;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -77,7 +78,7 @@ class PrescriptionController extends Controller
      * @param  \App\Models\prescription  $prescription
      * @return \Illuminate\Http\Response
      */
-    public function show(prescription $prescription): \Illuminate\Http\JsonResponse
+    public function show(prescription $prescription): JsonResponse
     {
         //
         try {

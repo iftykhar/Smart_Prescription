@@ -4,39 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Medicine;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class MedicineController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        //
         return Medicine::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
-        //
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         //validate
         $validate = Validator::make($request->all(),[
@@ -51,8 +37,8 @@ class MedicineController extends Controller
 
         if ($validate->fails()){
             return response()->json(['status' => false , 'message' => $validate->errors(), 'data' => $request]);
-        }else{
-            return response()->json(['status' => true , 'message' => 'success']);
+        }else {
+            return response()->json(['status' => true, 'message' => 'success']);
 
             $med = new Medicine;
 
@@ -67,15 +53,10 @@ class MedicineController extends Controller
 
             $med->save();
             return response()->json(['status' => true, 'message' => 'data insert success']);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Medicine  $medicine
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Medicine $medicine): \Illuminate\Http\JsonResponse
+    public function show(Medicine $medicine): JsonResponse
     {
         //
         try {

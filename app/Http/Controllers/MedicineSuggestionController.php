@@ -4,19 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\MedicineSuggestion;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class MedicineSuggestionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function index()
     {
-        //
         return MedicineSuggestion::all();
     }
 
@@ -48,9 +45,9 @@ class MedicineSuggestionController extends Controller
         if ($validate->fails()){
             return response()->json(['status' => false , 'message' => $validate->errors(), 'data' => $request]);
         }else{
-            return response()->json(['status' => true , 'message' => 'success']);
 
-        }
+
+
         $med = new MedicineSuggestion;
 
             $med->symptom_name = $request->symptom_name;
@@ -65,6 +62,7 @@ class MedicineSuggestionController extends Controller
 
             $med->save();
             return response()->json(['status' => true, 'message' => 'data insert success']);
+        }
     }
 
     /**
@@ -73,7 +71,7 @@ class MedicineSuggestionController extends Controller
      * @param  \App\Models\MedicineSuggestion  $medicineSuggestion
      * @return \Illuminate\Http\Response
      */
-    public function show(MedicineSuggestion $medicineSuggestion): \Illuminate\Http\JsonResponse
+    public function show(MedicineSuggestion $medicineSuggestion): JsonResponse
     {
         //
         try{

@@ -2,7 +2,12 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\MedicineSuggestionController;
+use App\Http\Controllers\PrescriptionController;
+use App\Http\Controllers\SymptomController;
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\TestSuggestionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Doctor;
@@ -28,6 +33,13 @@ Route::post('logout',[AuthController::class,'logout']);
 
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::resource('MedicineSuggestion', MedicineSuggestionController::class);
+    Route::resource('doctor', DoctorController::class);
+    Route::resource('Medicine', MedicineController::class);
+    Route::resource('Prescription', PrescriptionController::class);
+    Route::resource('Symptom', SymptomController::class);
+    Route::resource('Test', TestController::class);
+    Route::resource('TestSuggestion', TestSuggestionController::class);
+
 });
 
 
@@ -39,9 +51,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('doctor', function (){
-   return Doctor::all();
-});
 
-Route::resource('doctor', DoctorController::class);
 
