@@ -15,7 +15,7 @@ class DoctorController extends Controller
     }
 
 
-    public function create()
+    public function create(): int
     {
         //
         return 0;

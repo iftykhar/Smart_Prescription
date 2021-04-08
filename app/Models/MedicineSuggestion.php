@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static findOrfail(mixed $id)
+ * @method static create(array $values)
+ */
 class MedicineSuggestion extends Model
 {
     use HasFactory;
