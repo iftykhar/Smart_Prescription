@@ -150,7 +150,7 @@ class PrescriptionController extends Controller
      */
     public function destroy(prescription $prescription): \Illuminate\Http\JsonResponse
     {
-        PrescriptionController::destroy($prescription->);
+        PrescriptionController::destroy($prescription->id);
         return response()->json(['status' => true, 'message' => 'delete success']);
     }
 }
