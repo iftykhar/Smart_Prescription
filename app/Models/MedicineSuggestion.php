@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @method static findOrfail(mixed $id)
  * @method static create(array $values)
+ * @property mixed id
  */
 class MedicineSuggestion extends Model
 {

@@ -5,6 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property mixed id
+ * @method static create(array $attribute)
+ * @method static findOrFail(mixed $id)
+ */
 class prescription extends Model
 {
     use HasFactory;

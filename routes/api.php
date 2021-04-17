@@ -2,10 +2,10 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\MedicineSuggestionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Models\Doctor;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +20,7 @@ use App\Models\Doctor;
 
 // Basic Auth Route, it is guest mode
 Route::post('register',[AuthController::class,'register']);
-Route::post('login',[AuthController::class,'login']);
+Route::post('login',[AuthController::class,'login'])->name('Login');
 Route::post('logout',[AuthController::class,'logout']);
 
 
@@ -32,16 +32,11 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
 
 
-
-
-
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('doctor', function (){
-   return Doctor::all();
-});
 
-Route::resource('doctor', DoctorController::class);
+Route::resource('Doctor', DoctorController::class);
+Route::resource('Medicine', MedicineController::class);
 

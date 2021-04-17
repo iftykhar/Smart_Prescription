@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Symptom;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
 class SymptomController extends Controller
@@ -12,17 +14,17 @@ class SymptomController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function index()
+    public function index(): Response
     {
-        return Symptom::all();
+        return response()->json(Symptom::all());
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -33,11 +35,10 @@ class SymptomController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
-        //validation
         $validate = Validator::make($request->all(),[
             'symptoms_name'=> 'required',
         ]);
@@ -45,40 +46,34 @@ class SymptomController extends Controller
         if ($validate->fails()){
             return response()->json(['status' => false , 'message' => $validate->errors(), 'data' => $request]);
         }else{
-            return response()->json(['status' => true , 'message' => 'success']);
-
+            Symptom::create([
+                'symptoms_name' => $request->input('symptoms_name')
+            ]);
+            return response()->json(['status'=>true, 'message'=>'data stored successfully']);
         }
-
-        $symp = new Symptom;
-
-        $symp->symptoms_name = $request->symptoms_name;
-
-        $symp->save();
-        return response()->json(['status'=>true, 'message'=>'data stored successfully']);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Symptom  $symptom
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function show(Symptom $symptom)
+    public function show(Symptom $symptom): JsonResponse
     {
         try {
-            $symp = Symptom::findOrfail($symptom)
+             return response()->json(Symptom::findOrFail($symptom->id));
         }
         catch (ModelNotFoundException $exception){
             return response()->json(['Not found'], 404);
         }
-        return $symp;
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Symptom  $symptom
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function edit(Symptom $symptom)
     {
@@ -88,13 +83,12 @@ class SymptomController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Symptom  $symptom
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Symptom $symptom
+     * @return JsonResponse
      */
-    public function update(Request $request, Symptom $symptom): \Illuminate\Http\JsonResponse
+    public function update(Request $request, Symptom $symptom): JsonResponse
     {
-        //validation
         $validate = Validator::make($request->all(),[
             'symptoms_name'=> 'required',
         ]);
@@ -103,28 +97,27 @@ class SymptomController extends Controller
             return response()->json($validate->errors());
         }else {
             try {
-                $symp = Symptom::findOrfail($symptom);
+                $symptomData = Symptom::findOrfail($symptom);
+
+                $symptomData->update([
+                    'symptoms_name' => $request->input('symptom_name')
+                ]);
+                return response()->json('Update Success');
             } catch (ModelNotFoundException $exception) {
                 return response()->json('not found model');
             }
         }
-
-
-
-        $symp->symptoms_name = $request->symptoms_name;
-
-        $symp->save();
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Symptom  $symptom
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function destroy(Symptom $symptom): \Illuminate\Http\JsonResponse
+    public function destroy(Symptom $symptom): JsonResponse
     {
         Symptom::destroy($symptom->id);
-        return response()->json(['status'=>true, 'message'=>'delete successfull']);
+        return response()->json(['status'=>true, 'message'=>'delete successful']);
     }
 }

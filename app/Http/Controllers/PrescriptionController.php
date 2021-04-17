@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\prescription;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -12,18 +13,17 @@ class PrescriptionController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Collection|prescription[]
      */
     public function index()
     {
-        //
-        return PrescriptionContoller::all();
+        return prescription::all();
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -33,12 +33,11 @@ class PrescriptionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
-        //validation procedure
         $validate = Validator::make($request->all(),[
             'patient_name' => 'required',
             'patient_age' => 'required',
@@ -52,48 +51,44 @@ class PrescriptionController extends Controller
         if ($validate->fails()){
             return response()->json(['status' => false , 'message' => $validate->errors(), 'data' => $request]);
         }else{
+
+            $attribute = array(
+                'patient_name' => $request->input('patient_name'),
+                'patient_age' => $request->input('patient_age'),
+                'patient_gender' => $request->input('patient_gender'),
+                'patient_weight' => $request->input('patient_weight'),
+                'patient_bp_high' => $request->input('patient_bp_high'),
+                'patient_bp_low' => $request->input('patient_bp_low'),
+                'status' => $request->input('status')
+            );
+
+            prescription::create($attribute);
             return response()->json(['status' => true , 'message' => 'success']);
-
         }
-
-        $pres = new prescription;
-
-        $pres->patient_name = $request->patient_name;
-        $pres->patient_age = $request->patient_age;
-        $pres->patient_gender = $request->patient_gender;
-        $pres->patient_weight = $request->patient_weight;
-        $pres->patient_bp_high = $request->patient_bp_high;
-        $pres->patient_bp_low = $request->patient_bp_low;
-        $pres->status = $request->status;
-
-        $pres->save();
-        return response()->json(['status'=>true, 'message'=>'data uploaded']);
-
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\prescription  $prescription
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\prescription $prescription
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function show(prescription $prescription): \Illuminate\Http\JsonResponse
+    public function show(prescription $prescription): JsonResponse
     {
-        //
         try {
-            $pres = PrescriptionController::findOrfail($prescription->id);
+            $pres = prescription::findOrFail($prescription->id);
+            return response()->json($pres);
         }
         catch (ModelNotFoundException $exception){
             return response()->json(['Not found'], 404);
         }
-        return $pres;
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\prescription  $prescription
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function edit(prescription $prescription)
     {
@@ -103,11 +98,11 @@ class PrescriptionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\prescription  $prescription
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\prescription $prescription
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, prescription $prescription): \Illuminate\Http\JsonResponse
+    public function update(Request $request, prescription $prescription): JsonResponse
     {
         //validation procedure
         $validate = Validator::make($request->all(),[
@@ -124,33 +119,33 @@ class PrescriptionController extends Controller
             return response()->json($validate->errors());
         }else {
             try {
-                $pres = PrescriptionController::findOrfail($prescription);
+                $pres = prescription::findOrFail($prescription);
+                $attribute = array(
+                    'patient_name' => $request->input('patient_name'),
+                    'patient_age' => $request->input('patient_age'),
+                    'patient_gender' => $request->input('patient_gender'),
+                    'patient_weight' => $request->input('patient_weight'),
+                    'patient_bp_high' => $request->input('patient_bp_high'),
+                    'patient_bp_low' => $request->input('patient_bp_low'),
+                    'status' => $request->input('status')
+                );
+                $pres->update($attribute);
+                return response()->json('done');
             } catch (ModelNotFoundException $exception) {
                 return response()->json('not found model');
             }
         }
-
-        $pres->patient_name = $request->patient_name;
-        $pres->patient_age = $request->patient_age;
-        $pres->patient_gender = $request->patient_gender;
-        $pres->patient_weight = $request->patient_weight;
-        $pres->patient_bp_high = $request->patient_bp_high;
-        $pres->patient_bp_low = $request->patient_bp_low;
-        $pres->status = $request->status;
-
-        $pres->save();
-            return response()->json('done');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\prescription  $prescription
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\prescription $prescription
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(prescription $prescription): \Illuminate\Http\JsonResponse
+    public function destroy(prescription $prescription): JsonResponse
     {
-        PrescriptionController::destroy($prescription->);
+        PrescriptionController::destroy($prescription->id);
         return response()->json(['status' => true, 'message' => 'delete success']);
     }
 }
