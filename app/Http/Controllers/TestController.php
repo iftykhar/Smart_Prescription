@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Test;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -12,17 +13,17 @@ class TestController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        return Test::all();
+        return response()->json(Test::all());
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -32,10 +33,10 @@ class TestController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         //validation
         $validate = Validator::make($request->all(),[
@@ -45,39 +46,35 @@ class TestController extends Controller
         if ($validate->fails()){
             return response()->json(['status' => false , 'message' => $validate->errors(), 'data' => $request]);
         }else{
-            return response()->json(['status' => true , 'message' => 'success']);
-
+            Test::create([
+                'tests_name' => $request->input('tests_name')
+            ]);
+            return response()->json(['status'=>true, 'message'=>'data stored successfully']);
         }
 
-        $tes = new Test;
-        $tes->tests_name = $request->tests_name;
-
-        $tes->save();
-        return response()->json(['status'=>true, 'message'=>'data stored successfully']);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Test  $test
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Test $test
+     * @return JsonResponse
      */
-    public function show(Test $test): \Illuminate\Http\JsonResponse
+    public function show(Test $test): JsonResponse
     {
         try {
-            $tes = Test::findOrfail($test);
+          return response()->json(Test::findOrFail($test->id));
         }
         catch (ModelNotFoundException $exception){
             return response()->json(['Not found'], 404);
         }
-        return $tes;
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Test  $test
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Test $test
+     * @return void
      */
     public function edit(Test $test)
     {
@@ -87,11 +84,11 @@ class TestController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Test  $test
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Test $test
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Test $test): \Illuminate\Http\JsonResponse
+    public function update(Request $request, Test $test): JsonResponse
     {
         //validation
         $validate = Validator::make($request->all(),[
@@ -103,28 +100,27 @@ class TestController extends Controller
         }else{
             try {
                 $tes = Test::findOrfail($test->id);
+                $tes->update([
+                    'tests_name' => $request->input('tests_name')
+                ]);
+                return response()->json('done');
             }
             catch (ModelNotFoundException $exception){
                 return response()->json('not found model');
             }
         }
 
-        $tes = new Test;
-        $tes->tests_name = $request->tests_name;
-
-        $tes->save();
-        return response()->json('done');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Test  $test
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Test $test
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Test $test): \Illuminate\Http\JsonResponse
+    public function destroy(Test $test): JsonResponse
     {
         Test::destroy($test->id);
-        return response()->json(['status'=>true, 'message'=>'delete successfull']);
+        return response()->json(['status'=>true, 'message'=>'delete successful']);
     }
 }
