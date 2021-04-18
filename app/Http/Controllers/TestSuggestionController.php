@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Test_Suggestion;
-use http\Env\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,17 +13,17 @@ class TestSuggestionController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        return Test_Suggestion::all();
+        return response()->json(Test_Suggestion::all());
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function create()
     {
@@ -33,10 +33,10 @@ class TestSuggestionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request): \Illuminate\Http\JsonResponse
+    public function store(Request $request): JsonResponse
     {
         //validation
         $validate = Validator::make($request->all(),[
@@ -48,42 +48,38 @@ class TestSuggestionController extends Controller
         if ($validate->fails()){
             return response()->json(['status' => false , 'message' => $validate->errors(), 'data' => $request]);
         }else{
-            return response()->json(['status' => true , 'message' => 'success']);
+            Test_Suggestion::create([
+                'symptom_name' => $request->input('symptom_name'),
+                'tests_name' => $request->input('tests_name'),
+                'ts_score' => 0
+            ]);
+            return response()->json(['status'=>true, 'message'=>'data stored successfully']);
         }
 
-        $tes = new Test_Suggestion;
-
-        $tes->symptom_name = $request->symptom_name;
-        $tes->tests_name = $request->tests_name;
-        $tes->ts_score = 0;
-
-        $tes->save();
-        return response()->json(['status'=>true, 'message'=>'data stored successfully']);
 
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Test_Suggestion  $test_Suggestion
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Test_Suggestion $test_Suggestion
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Test_Suggestion $test_Suggestion): \Illuminate\Http\JsonResponse
+    public function show(Test_Suggestion $test_Suggestion): JsonResponse
     {
         try {
-            $tes = Test_Suggestion::findOrfail($test_Suggestion->id);
+            return response()->json(Test_Suggestion::findOrFail($test_Suggestion->id));
         }
         catch (ModelNotFoundException $exception){
             return response()->json(['Not found'], 404);
         }
-        return $tes;
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Test_Suggestion  $test_Suggestion
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function edit(Test_Suggestion $test_Suggestion)
     {
@@ -93,13 +89,12 @@ class TestSuggestionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Test_Suggestion  $test_Suggestion
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Test_Suggestion $test_Suggestion
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Test_Suggestion $test_Suggestion): \Illuminate\Http\JsonResponse
+    public function update(Request $request, Test_Suggestion $test_Suggestion): JsonResponse
     {
-        //validation
         $validate = Validator::make($request->all(),[
             'symptom_name' => 'required',
             'tests_name' => 'required',
@@ -107,32 +102,32 @@ class TestSuggestionController extends Controller
         ]);
 
         if ($validate->fails()){
-            return response()->json( $validate->errors());
+            return response()->json($validate->errors());
         }else{
             try {
-                $tes = Test_Suggestion::findOrfail($test_Suggestion->id);
+                $tes = Test_Suggestion::findOrFail($test_Suggestion->id);
+                $tes->update([
+                    'symptom_name' => $request->input('symptom_name'),
+                    'tests_name' => $request->input('symptom_name'),
+                    'ts_score' => 0
+                ]);
+                return response()->json('Data update success');
+
             }catch (ModelNotFoundException $exception){
                 return response()->json('not found model');
             }
         }
-
-        $tes->symptom_name = $request->symptom_name;
-        $tes->tests_name = $request->tests_name;
-        $tes->ts_score = 0;
-
-        $tes->save();
-        return response()->json('done');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Test_Suggestion  $test_Suggestion
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Test_Suggestion $test_Suggestion
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Test_Suggestion $test_Suggestion): \Illuminate\Http\JsonResponse
+    public function destroy(Test_Suggestion $test_Suggestion): JsonResponse
     {
         Test_Suggestion::destroy($test_Suggestion->id);
-        return response()->json(['status'=>true, 'message'=>'delete successfull']);
+        return response()->json(['status'=>true, 'message'=>'delete successful']);
     }
 }
