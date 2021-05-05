@@ -15,13 +15,6 @@ class DoctorController extends Controller
        return Doctor::all();
     }
 
-
-    public function create(): int
-    {
-        return 0;
-    }
-
-
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [

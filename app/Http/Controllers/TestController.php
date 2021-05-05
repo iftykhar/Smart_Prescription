@@ -21,19 +21,10 @@ class TestController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.     *
-     * @return void
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return JsonResponse
      */
     public function store(Request $request): JsonResponse
     {
@@ -56,7 +47,7 @@ class TestController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\Test $test
+     * @param Test $test
      * @return JsonResponse
      */
     public function show(Test $test): JsonResponse
@@ -72,7 +63,7 @@ class TestController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Models\Test $test
+     * @param Test $test
      * @return void
      */
     public function edit(Test $test)
@@ -83,9 +74,9 @@ class TestController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Test $test
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @param Test $test
+     * @return JsonResponse
      */
     public function update(Request $request, Test $test): JsonResponse
     {
@@ -114,8 +105,8 @@ class TestController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Test $test
-     * @return \Illuminate\Http\JsonResponse
+     * @param Test $test
+     * @return JsonResponse
      */
     public function destroy(Test $test): JsonResponse
     {

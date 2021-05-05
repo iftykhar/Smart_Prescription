@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static create(array $attribute)
  * @method static findOrFail(mixed $id)
  */
-class prescription extends Model
+class Prescription extends Model
 {
     use HasFactory;
 

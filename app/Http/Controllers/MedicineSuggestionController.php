@@ -13,7 +13,7 @@ class MedicineSuggestionController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(): JsonResponse
     {
@@ -66,8 +66,8 @@ class MedicineSuggestionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\MedicineSuggestion $medicineSuggestion
-     * @return \Illuminate\Http\JsonResponse
+     * @param MedicineSuggestion $medicineSuggestion
+     * @return JsonResponse
      */
     public function show(MedicineSuggestion $medicineSuggestion): JsonResponse
     {
@@ -82,7 +82,7 @@ class MedicineSuggestionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\MedicineSuggestion  $medicineSuggestion
+     * @param MedicineSuggestion $medicineSuggestion
      * @return void
      */
     public function edit(MedicineSuggestion $medicineSuggestion)
@@ -93,9 +93,9 @@ class MedicineSuggestionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\MedicineSuggestion $medicineSuggestion
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @param MedicineSuggestion $medicineSuggestion
+     * @return JsonResponse
      */
     public function update(Request $request, MedicineSuggestion $medicineSuggestion): JsonResponse
     {
@@ -137,8 +137,8 @@ class MedicineSuggestionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\MedicineSuggestion $medicineSuggestion
-     * @return \Illuminate\Http\JsonResponse
+     * @param MedicineSuggestion $medicineSuggestion
+     * @return JsonResponse
      */
     public function destroy(MedicineSuggestion $medicineSuggestion): JsonResponse
     {

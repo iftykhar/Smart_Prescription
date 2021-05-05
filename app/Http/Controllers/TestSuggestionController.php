@@ -13,7 +13,7 @@ class TestSuggestionController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index(): JsonResponse
     {
@@ -33,8 +33,8 @@ class TestSuggestionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return JsonResponse
      */
     public function store(Request $request): JsonResponse
     {
@@ -62,8 +62,8 @@ class TestSuggestionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\Test_Suggestion $test_Suggestion
-     * @return \Illuminate\Http\JsonResponse
+     * @param Test_Suggestion $test_Suggestion
+     * @return JsonResponse
      */
     public function show(Test_Suggestion $test_Suggestion): JsonResponse
     {
@@ -78,7 +78,7 @@ class TestSuggestionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Test_Suggestion  $test_Suggestion
+     * @param Test_Suggestion $test_Suggestion
      * @return void
      */
     public function edit(Test_Suggestion $test_Suggestion)
@@ -89,9 +89,9 @@ class TestSuggestionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Test_Suggestion $test_Suggestion
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @param Test_Suggestion $test_Suggestion
+     * @return JsonResponse
      */
     public function update(Request $request, Test_Suggestion $test_Suggestion): JsonResponse
     {
@@ -122,8 +122,8 @@ class TestSuggestionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Test_Suggestion $test_Suggestion
-     * @return \Illuminate\Http\JsonResponse
+     * @param Test_Suggestion $test_Suggestion
+     * @return JsonResponse
      */
     public function destroy(Test_Suggestion $test_Suggestion): JsonResponse
     {
